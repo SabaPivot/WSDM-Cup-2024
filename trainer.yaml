@@ -1,0 +1,22 @@
+dataset:
+  language: English
+  train_path: dataset/train.parquet
+  max_seq_length: 1024
+  dataset_num_proc: 4
+model:
+  model_path: unsloth/Llama-3.2-3B-Instruct
+training_args:
+  gradient_accumulation_steps: 1
+  learning_rate: 5.0e-06
+  logging_steps: 50
+  lr_scheduler_type: cosine
+  num_train_epochs: 3
+  optim: paged_adamw_32bit
+  output_dir: outputs2
+  per_device_train_batch_size: 16
+  report_to: wandb
+  save_steps: 500
+  save_total_limit: 5
+  seed: 42
+  warmup_ratio: 0.01
+  weight_decay: 0.01
