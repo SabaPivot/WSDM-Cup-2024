@@ -32,9 +32,11 @@ def preprocess(tokenizer, example, train: bool):
 
 def map_dataset(df, tokenizer, language):
     dataset = pd_to_dataset(choose_langugae(df, language))
-    processed_dataset = dataset.map(lambda x: preprocess(tokenizer, x, True))
+    processed_dataset_train = dataset.map(lambda x: preprocess(tokenizer, x, True))
+    processed_dataset_test = dataset.map(lambda x: preprocess(tokenizer, x, False))
 
-    train_test_split = processed_dataset.train_test_split(train_size=0.98, seed=42)
-    train_dataset, test_dataset = train_test_split["train"], train_test_split["test"]
+    train_split = processed_dataset_train.train_test_split(train_size=0.98, seed=42)
+    test_split = processed_dataset_test.train_test_split(train_size=0.98, seed=42)
+    train_dataset, test_dataset = train_split["train"], test_split
 
     return train_dataset, test_dataset
