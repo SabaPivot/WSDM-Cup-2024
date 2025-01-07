@@ -3,15 +3,10 @@ from tqdm import tqdm
 from unsloth import FastLanguageModel
 import torch
 
-def map_test(test_dataset, tokenizer):
-    processed_test = test_dataset.map(lambda x: preprocess(tokenizer, x, train=False))
-    return processed_test
 
-
-def infer(model, tokenizer, test_dataset):
+def infer(model, test_dataset):
     FastLanguageModel.for_inference(model)
-    processed_test_data = map_test(test_dataset=test_dataset, tokenizer=tokenizer)
-    tokenized_test, answer = processed_test_data['text'], processed_test_data['winner']
+    tokenized_test, answer = test_dataset['text'], test_dataset['winner']
 
     results = []
     for inputs in tqdm(tokenized_test):
@@ -25,5 +20,7 @@ def infer(model, tokenizer, test_dataset):
         )
         outputs = outputs[:, input_length:]
         results.append(outputs)
+
+    print(len(results), len(answer))
 
     # ToDo: results와 answer 비교
